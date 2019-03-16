@@ -1,4 +1,5 @@
-from city import City
+# -- Internal imports -- #
+from src.city import City
 
 class Route:
 
@@ -23,6 +24,7 @@ class Route:
             Params: None
             Output: self.distance (float)
         '''
+        
         if self.distance == 0 :
 
             total_distance = 0

@@ -1,34 +1,27 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 # -- External imports -- #
 from random import sample 
 import operator
 
 # -- Internal imports -- #
-from city import City
-from route import Route
-
-CITIES = {
-    "A": (5, 10), 
-    "B": (3, 8), 
-    "C": (4.7, 6), 
-    "D": (4.3, 4), 
-    "E": (5.3, 8.2), 
-    "F": (6, 4.4)
-}
+from src.city import City
+from src.route import Route
 
 class Population:
 
+    def __init__(self, population_size, cities):
 
-    def __init__(self, population_size):
+        '''
+            Description: Initialize a population composed of routes
+            Params: population_size (int), cities (dict({'A': (coordX, coordY), ...}))
+            Output: None
+        '''
 
-        cities = [city_name for city_name in CITIES.keys()]
+        cities_list = [city_name for city_name in cities.keys()]
         routes = []
 
         for iteration in range(population_size) :
 
-            iteration_cities = [City(city_name, CITIES[city_name][0], CITIES[city_name][1]) for city_name in sample(cities, len(cities))]
+            iteration_cities = [City(city_name, cities[city_name][0], cities[city_name][1]) for city_name in sample(cities_list, len(cities_list))]
             route = Route(iteration_cities)
             routes.append(route)
 
@@ -57,11 +50,16 @@ class Population:
 
     def describe(self) :
 
+        '''
+            Description: Display all routes contained in the current population
+            Params: None
+            Output: None
+        '''
+
         print('Population composed of {} routes\n'.format(self.size))
         
         for route in self.routes :
 
             print(route.describe())
 
-            
         pass

@@ -2,19 +2,14 @@
 # -*- coding: utf-8 -*-
 
 # -- External imports -- #
-
+import os
 
 # -- Internal imports -- #
-
-from city import City
-from population import Population
+from src.city import City
+from src.population import Population
+from var.variables import *
 
 # -- Global variables -- # 
-
-GENERATIONS = 10
-MUTATION_RATE = .2
-POPULATION_SIZE = 50
-ELITE_SIZE = 10 # 20% of the original population size
 
 def selection() :
     return 
@@ -28,7 +23,7 @@ def mutation() :
 
 if __name__ == '__main__' :
 
-    population = Population(4)
+    population = Population(4, CITIES)
     population.describe()
 
     print('\n', population.rankRoutes())
