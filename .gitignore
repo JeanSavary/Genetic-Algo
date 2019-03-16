@@ -1,5 +1,8 @@
 #pyCache
-./__pycache__
+__pycache__
 
 #vscode
-./vscode
+vscode
+
+#README
+README.txt
