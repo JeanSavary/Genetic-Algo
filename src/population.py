@@ -1,6 +1,7 @@
 # -- External imports -- #
 from random import sample 
 import operator
+import numpy as np
 
 # -- Internal imports -- #
 from src.city import City
@@ -37,7 +38,6 @@ class Population:
             Params: None
             Output: Dict
         '''
-
         ranked_routes = {}
         for route in self.routes: 
             ranked_routes[route] = route.computeFitness()

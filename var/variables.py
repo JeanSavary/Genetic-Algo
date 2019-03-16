@@ -2,8 +2,8 @@
 
 GENERATIONS = 10
 MUTATION_RATE = .2
-POPULATION_SIZE = 50
-ELITE_SIZE = 10 # 20% of the original population size
+POPULATION_SIZE = int(input("Choose the size of the population :\t"))
+ELITE_SIZE = int(.2 * POPULATION_SIZE )
 CITIES = {
     "A": (5, 10), 
     "B": (3, 8), 
