@@ -47,7 +47,7 @@ class Population:
 
         ranked_routes = {}
         for route in self.routes: 
-            ranked_route[route] = route.computeFitness()
+            ranked_routes[route] = route.computeFitness()
 
         return sorted(
             ranked_routes.items(),
