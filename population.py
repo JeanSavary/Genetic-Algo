@@ -3,6 +3,7 @@
 
 # -- External imports -- #
 from random import sample 
+import operator
 
 # -- Internal imports -- #
 from city import City
@@ -36,7 +37,24 @@ class Population:
 
         pass 
 
-    
+    def rankRoutes(self):
+
+        '''
+            Description: Rank all the routes in the current population based on their fitness score
+            Params: None
+            Output: Dict
+        '''
+
+        ranked_routes = {}
+        for route in self.routes: 
+            ranked_route[route] = route.computeFitness()
+
+        return sorted(
+            ranked_routes.items(),
+            key = operator.itemgetter(1),
+            reverse = True
+        )
+
     def describe(self) :
 
         print('Population composed of {} routes\n'.format(self.size))
