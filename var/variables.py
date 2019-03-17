@@ -1,9 +1,9 @@
 # -- Define all global variables for the projetct -- #
 
 GENERATIONS = 10
-MUTATION_RATE = .2
+MUTATION_RATE = .3 # 30% chance that a specific individual mutate during a generation
 POPULATION_SIZE = int(input("\nChoose the size of the population :\t"))
-ELITE_SIZE = int(.2 * POPULATION_SIZE )
+ELITE_SIZE = int(.2 * POPULATION_SIZE ) # 20% of our population size
 CITIES = {
     "A": (5, 10), 
     "B": (3, 8), 

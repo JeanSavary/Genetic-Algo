@@ -5,7 +5,7 @@
 import os
 import numpy as np 
 import pandas as pd
-from random import uniform
+from random import uniform, sample
 
 # -- Internal imports -- #
 from src.city import City
@@ -78,9 +78,32 @@ def crossOver(first_parent, second_parent) :
     #print(Route([City(city_name, CITIES[city_name][0], CITIES[city_name][1]) for city_name in child]).describe())
     return Route([City(city_name, CITIES[city_name][0], CITIES[city_name][1]) for city_name in child])
 
-def mutation() :
-    return 
+def mutation(route, mutation_rate) :
 
+    '''
+        Description: Perfom a random mutation (with low probability) to an individual to avoir local convergence
+        Params: route (Route), mutation_rate (float between 0 and 1)
+        Output: route (Route)
+    '''
+
+    if (uniform(0,1) > mutation_rate) : # if the condition is valid then we will expose the individual to mutations
+
+        mutation_index = sample([i for i in range(len(route.cities))], 2)
+        mutated_cities = route.cities 
+
+        print("Perform mutation between city {} and {}".format(route.cities[mutation_index[0]].name, route.cities[mutation_index[1]].name))
+        mutated_cities[mutation_index[0]], mutated_cities[mutation_index[1]] = mutated_cities[mutation_index[1]], mutated_cities[mutation_index[0]]
+
+        return Route(mutated_cities)
+
+    else :
+
+        print("No mutation performed")
+        return route
+
+
+def nextGeneration():
+    return 
 
 if __name__ == '__main__' :
 
@@ -92,4 +115,9 @@ if __name__ == '__main__' :
     print(routeA.describe())
     print(routeB.describe())
 
-    crossOver(routeA, routeB)
+    routeC = crossOver(routeA, routeB)
+
+    print(routeC.describe())
+
+    mutated_routeC = mutation(routeC, MUTATION_RATE)
+    print(mutated_routeC.describe())
