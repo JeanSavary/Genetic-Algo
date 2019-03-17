@@ -17,14 +17,12 @@ from var.variables import *
 
 # -- Main functions -- #
 
-def selection(ranked_population, elite_size) :
+def selection(ranked_population, elite_size):
     
     '''
         Description: Perform a roulette wheel selection, including an elite population
         Params: ranked_population ( list( (Route, fitness_score) ) )
         Output: list( Route )
-
-        NB: We might want to also include the elite population (our top 20% in the roulette wheel selection, but here it's not the case)
     '''
 
     selection_results = [elem[0] for elem in ranked_population[:elite_size]] # We directly select our 'elite' population
@@ -47,7 +45,7 @@ def selection(ranked_population, elite_size) :
 
     return selection_results
 
-def crossOver(first_parent, second_parent) :
+def crossOver(first_parent, second_parent):
 
     '''
         Description: Create a child after mixing information from the 2 parents
@@ -104,15 +102,30 @@ def mutation(route, mutation_rate) :
         print("No mutation performed !")
         return route
 
-def nextGeneration(routes):
+def nextPopulation(current_population, elite_size, mutation_rate):
 
     '''
         Description: Generate a new generation (population)
         Params: 
         Output:
+        NB: We can also directly pass the elite population to the next gen without using them in crossOver()
+
     '''
 
-    return 
+    ranked_current_population = current_population.rankRoutes() #rank individuals inside our current population
+    selected_routes = selection(current_population, elite_size) #list of routes
+
+    #print(len(current_population) == len(selected_routes))
+    children = []
+    for selected_route in selected_routes :
+
+        first_parent = 
+        second_parent = 
+        child = crossOver(first_parent, second_parent)
+        mutated_child = mutation(child)
+        children.append(mutated_child)
+
+    return Population(children)
 
 def bestRoute(population):
 
@@ -159,21 +172,53 @@ if __name__ == '__main__' :
         initial_routes.append(route)
 
     initial_population = Population(initial_routes)
-    initial_population.describe()
 
     # -- Enter the evolution process -- #
 
-    routeA = initial_population.routes[0]
-    routeB = initial_population.routes[1]
+    fitness_scores = []
+    current_population = initial_population
+    for generation in range(GENERATIONS) :
 
-    print(routeA.describe())
-    print(routeB.describe())
+        print("Generation {}\n".format(generation + 1))
 
-    routeC = crossOver(routeA, routeB)
+        current_population = nextPopulation(current_population, ELITE_SIZE, MUTATION_RATE)
+        current_best_individual = bestRoute(current_population).describe()
 
-    print(routeC.describe())
+        print("""
+        \tCurrent best distance : {}\n
+        \tCurrent best fitness : {}\n
+        \tCurrent best path : {}\n
+        """.format(
+            current_best_individual["Distance"],
+            current_best_individual["Fitness"],
+            current_best_individual["Cities"]
+        ))
+        
+        fitness_scores.append(current_best_individual["Fitness"])
+    
+    print("""
+    We have our champion !\n
+    Here is the best path : {}\n
+    \tWith a distance of : {}\n
+    \tAnd a fitness of : {}
+    """.format(
+        current_best_individual["Distance"],
+        current_best_individual["Fitness"],
+        current_best_individual["Cities"])
+    )
 
-    mutated_routeC = mutation(routeC, MUTATION_RATE)
-    print(mutated_routeC.describe())
+    plotEvolution(fitness_scores)
+    # routeA = initial_population.routes[0]
+    # routeB = initial_population.routes[1]
 
-    bestRoute(initial_population)
+    # print('\n',routeA.describe())
+    # print(routeB.describe())
+
+    # routeC = crossOver(routeA, routeB)
+
+    # print(routeC.describe())
+
+    # mutated_routeC = mutation(routeC, MUTATION_RATE)
+    # print(mutated_routeC.describe())
+
+    # bestRoute(initial_population)
