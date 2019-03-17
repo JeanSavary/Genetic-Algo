@@ -65,7 +65,7 @@ def crossOver(first_parent, second_parent):
     start_point = min(first_gene_index, second_gene_index) #index between which we will perform the cross-over
     end_point = max(first_gene_index, second_gene_index)
 
-    print("\nStart : {} / End : {}\n".format(start_point, end_point))
+    #print("\nStart : {} / End : {}\n".format(start_point, end_point))
 
     for index in range(start_point, end_point + 1):
         child[index] = first_parent.cities[index].name
@@ -92,15 +92,36 @@ def mutation(route, mutation_rate) :
         mutation_index = sample([i for i in range(len(route.cities))], 2)
         mutated_cities = route.cities 
 
-        print("Perform mutation between city {} and {} !".format(route.cities[mutation_index[0]].name, route.cities[mutation_index[1]].name))
+        #print("Perform mutation between city {} and {} !".format(route.cities[mutation_index[0]].name, route.cities[mutation_index[1]].name))
         mutated_cities[mutation_index[0]], mutated_cities[mutation_index[1]] = mutated_cities[mutation_index[1]], mutated_cities[mutation_index[0]]
 
         return Route(mutated_cities)
 
     else :
 
-        print("No mutation performed !")
+        #print("No mutation performed !")
         return route
+
+def makeCouples(parents):
+
+    '''
+        Description: Each parent will be involved in 2 couples, so that each parent will contribute to the next generation
+        respecting the previous generation size
+        Params: parents (list(Route))
+        Output: couples (list(tuple(Route, Route)))
+    '''
+    parents_pool = []
+    for iteration in range(2):
+
+        iteration_parents_pool = np.array(parents)
+        np.random.shuffle(iteration_parents_pool)
+        parents_pool += list(iteration_parents_pool)
+
+    parents_pool = np.array(parents_pool).reshape(len(parents_pool) // 2, 2)
+
+    couples = [(first_parent, second_parent) for (first_parent, second_parent) in parents_pool]
+    
+    return couples 
 
 def nextPopulation(current_population, elite_size, mutation_rate):
 
@@ -113,20 +134,20 @@ def nextPopulation(current_population, elite_size, mutation_rate):
     '''
 
     ranked_current_population = current_population.rankRoutes() #rank individuals inside our current population
-    selected_routes = selection(current_population, elite_size) #list of routes
+    selected_routes = selection(ranked_current_population, elite_size) #list of routes
 
-    #print(len(current_population) == len(selected_routes))
+    couples = makeCouples(selected_routes)
+
     children = []
-    for selected_route in selected_routes :
 
-        first_parent = 
-        second_parent = 
+    for (first_parent, second_parent) in couples :
+
         child = crossOver(first_parent, second_parent)
-        mutated_child = mutation(child)
+        mutated_child = mutation(child, mutation_rate)
         children.append(mutated_child)
 
     return Population(children)
-
+    
 def bestRoute(population):
 
     '''
@@ -136,8 +157,6 @@ def bestRoute(population):
     '''
 
     best_route = population.rankRoutes()[0][0]
-
-    print("The best route is : \n{}".format(best_route.describe()))
     return best_route
 
 def plotEvolution(best_fitness_scores):
@@ -177,11 +196,13 @@ if __name__ == '__main__' :
 
     fitness_scores = []
     current_population = initial_population
+
     for generation in range(GENERATIONS) :
 
         print("Generation {}\n".format(generation + 1))
 
         current_population = nextPopulation(current_population, ELITE_SIZE, MUTATION_RATE)
+
         current_best_individual = bestRoute(current_population).describe()
 
         print("""
@@ -198,27 +219,13 @@ if __name__ == '__main__' :
     
     print("""
     We have our champion !\n
-    Here is the best path : {}\n
+    \tHere is the best path : {}\n
     \tWith a distance of : {}\n
     \tAnd a fitness of : {}
     """.format(
+        current_best_individual["Cities"],
         current_best_individual["Distance"],
-        current_best_individual["Fitness"],
-        current_best_individual["Cities"])
+        current_best_individual["Fitness"])
     )
 
     plotEvolution(fitness_scores)
-    # routeA = initial_population.routes[0]
-    # routeB = initial_population.routes[1]
-
-    # print('\n',routeA.describe())
-    # print(routeB.describe())
-
-    # routeC = crossOver(routeA, routeB)
-
-    # print(routeC.describe())
-
-    # mutated_routeC = mutation(routeC, MUTATION_RATE)
-    # print(mutated_routeC.describe())
-
-    # bestRoute(initial_population)

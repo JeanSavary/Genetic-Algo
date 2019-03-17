@@ -35,7 +35,6 @@ class Route:
 
                     total_distance += city.distance(self.cities[city_index + 1])
 
-
             self.distance = total_distance
         
         return self.distance 

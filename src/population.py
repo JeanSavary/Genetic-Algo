@@ -52,5 +52,4 @@ class Population:
 
             print("\nRoute n° {} :\n".format(route_index))
             print(route.describe())
-
-        pass
+        
