@@ -15,6 +15,8 @@ class Population:
             Description: Initialize a population composed of routes
             Params: population_size (int), cities (dict({'A': (coordX, coordY), ...}))
             Output: None
+
+            NB: modifier cette classe pour n'avoir en paramètre qu'une liste de routes
         '''
 
         cities_list = [city_name for city_name in cities.keys()]
@@ -36,8 +38,9 @@ class Population:
         '''
             Description: Rank all the routes in the current population based on their fitness score
             Params: None
-            Output: Dict
+            Output: List(tuple)
         '''
+
         ranked_routes = {}
         for route in self.routes: 
             ranked_routes[route] = route.computeFitness()
@@ -56,10 +59,5 @@ class Population:
             Output: None
         '''
 
-        print('\nPopulation composed of {} routes\n'.format(self.size))
         
-        for route in self.routes :
-
-            print(route.describe())
-
-        pass
+        print("debug plz")

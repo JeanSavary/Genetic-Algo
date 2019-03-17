@@ -14,6 +14,7 @@ from src.population import Route
 from var.variables import *
 
 # -- Main functions -- #
+
 def selection(ranked_population, elite_size) :
     
     '''
@@ -86,7 +87,7 @@ def mutation(route, mutation_rate) :
         Output: route (Route)
     '''
 
-    if (uniform(0,1) > mutation_rate) : # if the condition is valid then we will expose the individual to mutations
+    if (uniform(0,1) < mutation_rate) : # if the condition is valid then we will expose the individual to mutations
 
         mutation_index = sample([i for i in range(len(route.cities))], 2)
         mutated_cities = route.cities 
@@ -101,9 +102,28 @@ def mutation(route, mutation_rate) :
         print("No mutation performed")
         return route
 
-
 def nextGeneration():
+
+    '''
+        Description: Generate a new generation (population)
+        Params: 
+        Output:
+    '''
+
     return 
+
+def bestRoute(population):
+
+    '''
+        Description: Compute and retrieve the best individual (route) of the generation
+        Params: population (Population)
+        Output: best_route (Route)
+    '''
+
+    best_route = population.rankRoutes()[0][0]
+
+    print("The best route is : \n{}".format(best_route.describe()))
+    return best_route
 
 if __name__ == '__main__' :
 
@@ -121,3 +141,5 @@ if __name__ == '__main__' :
 
     mutated_routeC = mutation(routeC, MUTATION_RATE)
     print(mutated_routeC.describe())
+
+    bestRoute(initial_population)
