@@ -6,6 +6,8 @@ import os
 import numpy as np 
 import pandas as pd
 from random import uniform, sample
+import matplotlib.pyplot as plt
+
 
 # -- Internal imports -- #
 from src.city import City
@@ -92,17 +94,17 @@ def mutation(route, mutation_rate) :
         mutation_index = sample([i for i in range(len(route.cities))], 2)
         mutated_cities = route.cities 
 
-        print("Perform mutation between city {} and {}".format(route.cities[mutation_index[0]].name, route.cities[mutation_index[1]].name))
+        print("Perform mutation between city {} and {} !".format(route.cities[mutation_index[0]].name, route.cities[mutation_index[1]].name))
         mutated_cities[mutation_index[0]], mutated_cities[mutation_index[1]] = mutated_cities[mutation_index[1]], mutated_cities[mutation_index[0]]
 
         return Route(mutated_cities)
 
     else :
 
-        print("No mutation performed")
+        print("No mutation performed !")
         return route
 
-def nextGeneration():
+def nextGeneration(routes):
 
     '''
         Description: Generate a new generation (population)
@@ -125,10 +127,42 @@ def bestRoute(population):
     print("The best route is : \n{}".format(best_route.describe()))
     return best_route
 
+def plotEvolution(best_fitness_scores):
+
+    '''
+        Description: Display the evolution of our best individual's fitness score for each generation
+        Params: best_fitness_scores (list)
+        Output: None
+    '''
+
+    generations = [i for i in range(1, len(fitness_scores) + 1)]
+
+    plt.plot(generations, best_fitness_scores)
+    plt.xlabel("Generation number")
+    plt.ylabel("Best fitness score")
+    plt.title("Evolution of the best fitness scores")
+    plt.show()
+
+    return
+
 if __name__ == '__main__' :
 
-    initial_population = Population(POPULATION_SIZE, CITIES)
-    
+    # -- Initialize our first population -- #
+
+    cities_list = [city_name for city_name in CITIES.keys()]
+    initial_routes = []
+
+    for iteration in range(POPULATION_SIZE) :
+
+        iteration_cities = [City(city_name, CITIES[city_name][0], CITIES[city_name][1]) for city_name in sample(cities_list, len(cities_list))]
+        route = Route(iteration_cities)
+        initial_routes.append(route)
+
+    initial_population = Population(initial_routes)
+    initial_population.describe()
+
+    # -- Enter the evolution process -- #
+
     routeA = initial_population.routes[0]
     routeB = initial_population.routes[1]
 

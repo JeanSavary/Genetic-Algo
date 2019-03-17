@@ -9,29 +9,18 @@ from src.route import Route
 
 class Population:
 
-    def __init__(self, population_size, cities):
+    def __init__(self, routes):
 
         '''
             Description: Initialize a population composed of routes
             Params: population_size (int), cities (dict({'A': (coordX, coordY), ...}))
             Output: None
-
-            NB: modifier cette classe pour n'avoir en paramètre qu'une liste de routes
         '''
-
-        cities_list = [city_name for city_name in cities.keys()]
-        routes = []
-
-        for iteration in range(population_size) :
-
-            iteration_cities = [City(city_name, cities[city_name][0], cities[city_name][1]) for city_name in sample(cities_list, len(cities_list))]
-            route = Route(iteration_cities)
-            routes.append(route)
 
         self.routes = routes
         self.size = len(self.routes)
 
-        pass 
+        pass
 
     def rankRoutes(self):
 
@@ -59,5 +48,7 @@ class Population:
             Output: None
         '''
 
-        
-        print("debug plz")
+        for route_index, route in enumerate(self.routes) :
+
+            print("\nRoute n° {} :\n".format(route_index))
+            print(route.describe())
