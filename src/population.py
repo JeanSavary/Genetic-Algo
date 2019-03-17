@@ -56,7 +56,7 @@ class Population:
             Output: None
         '''
 
-        print('Population composed of {} routes\n'.format(self.size))
+        print('\nPopulation composed of {} routes\n'.format(self.size))
         
         for route in self.routes :
 

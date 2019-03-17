@@ -10,12 +10,20 @@ from random import uniform
 # -- Internal imports -- #
 from src.city import City
 from src.population import Population
+from src.population import Route
 from var.variables import *
 
-# -- Global variables -- # 
-
+# -- Main functions -- #
 def selection(ranked_population, elite_size) :
     
+    '''
+        Description: Perform a roulette wheel selection, including an elite population
+        Params: ranked_population ( list( (Route, fitness_score) ) )
+        Output: list( Route )
+
+        NB: We might want to also include the elite population (our top 20% in the roulette wheel selection, but here it's not the case)
+    '''
+
     selection_results = [elem[0] for elem in ranked_population[:elite_size]] # We directly select our 'elite' population
     fitness_list = [elem[1] for elem in ranked_population[elite_size:]] # Then we'll perform the "roulette wheel selection"
 
@@ -36,10 +44,39 @@ def selection(ranked_population, elite_size) :
 
     return selection_results
 
-def crossOver() :
-    return 
+def crossOver(first_parent, second_parent) :
 
+    '''
+        Description: Create a child after mixing information from the 2 parents
+        Params: first_parent (Route), second_parent (Route)
+        Output: child (Route)
+    '''
 
+    # print("\nParents : \n")
+    # print(first_parent.describe())
+    # print(second_parent.describe())
+
+    child = [None] * len(first_parent.cities)
+
+    first_gene_index = int(uniform(0,1) * len(first_parent.cities))
+    second_gene_index = int(uniform(0,1) * len(second_parent.cities))
+    
+    start_point = min(first_gene_index, second_gene_index) #index between which we will perform the cross-over
+    end_point = max(first_gene_index, second_gene_index)
+
+    print("\nStart : {} / End : {}\n".format(start_point, end_point))
+
+    for index in range(start_point, end_point + 1):
+        child[index] = first_parent.cities[index].name
+    
+    queue_second_parent_cities = [city.name for city in second_parent.cities if city.name not in child]
+    
+    for index, city_name in enumerate(child) :
+        if city_name is None :
+            child[index] = queue_second_parent_cities.pop(0)
+
+    #print(Route([City(city_name, CITIES[city_name][0], CITIES[city_name][1]) for city_name in child]).describe())
+    return Route([City(city_name, CITIES[city_name][0], CITIES[city_name][1]) for city_name in child])
 
 def mutation() :
     return 
@@ -48,5 +85,11 @@ def mutation() :
 if __name__ == '__main__' :
 
     initial_population = Population(POPULATION_SIZE, CITIES)
-    selection(initial_population.rankRoutes(), ELITE_SIZE)
     
+    routeA = initial_population.routes[0]
+    routeB = initial_population.routes[1]
+
+    print(routeA.describe())
+    print(routeB.describe())
+
+    crossOver(routeA, routeB)
