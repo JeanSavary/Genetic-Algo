@@ -2,10 +2,10 @@
 __pycache__
 
 #vscode
-vscode
+.vscode
 
 #README
 README.txt
 
 #DS_Store
-DS_Store
+.DS_Store
